@@ -26,6 +26,27 @@ def get_all_jobs():
     response = make_response(jsonify(jobs_list),200)
     return response
 
+#view a single job
+@job_bp.route('/jobs.<int:job_id>' , methods=['GET'])
+def  get_single_job(job_id):
+    job = Job.query.get_or_404(job_id)
+    job_data = {
+        'id':job.id,
+        'id': job.id,
+            'title':job.title,
+            'category':job.category,
+            'description':job.description,
+            'company':job.company,
+            'location':job.location,
+            'requirements':job.requirements,
+            'salary':job.salary,
+            'created_at':job.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    }
+    response = make_response(
+        jsonify(job_data),200
+    )
+    return response
+
 # View jobs posted by user
 @job_bp.route('/my_jobs', methods=['GET'])
 @jwt_required()  # Requires authentication
@@ -195,3 +216,27 @@ def delete_job(job_id):
     db.session.commit()
     
     return jsonify({"message": "Job deleted successfully"}), 200
+
+
+#search job by title
+@job_bp.route('/jobs/<string:search>', methods=['GET'])
+def search_property(search):
+   jobs= Job.query.filter(Job.title.ilike(f'%{search}%')).all()
+     
+   if not jobs:
+        return jsonify({"error": "Title not found"}), 404
+
+   else:
+      return jsonify([
+      {
+        'id': job.id,
+        'title':job.title,
+        'category':job.category,
+        'description':job.description,
+        'company':job.company,
+        'location':job.location,
+        'requirements':job.requirements,
+        'salary':job.salary,
+        'created_at':job.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }for job in jobs]
+      ),200
