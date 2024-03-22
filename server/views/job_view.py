@@ -20,6 +20,7 @@ def get_all_jobs():
             'location':job.location,
             'requirements':job.requirements,
             'salary':job.salary,
+            'deadline':job.deadline,
             'created_at':job.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }
         jobs_list.append(jobs_data)
@@ -27,7 +28,7 @@ def get_all_jobs():
     return response
 
 #view a single job
-@job_bp.route('/jobs.<int:job_id>' , methods=['GET'])
+@job_bp.route('/jobs/<int:job_id>' , methods=['GET'])
 def  get_single_job(job_id):
     job = Job.query.get_or_404(job_id)
     job_data = {
@@ -40,6 +41,7 @@ def  get_single_job(job_id):
             'location':job.location,
             'requirements':job.requirements,
             'salary':job.salary,
+            'deadline':job.deadline,
             'created_at':job.created_at.strftime('%Y-%m-%d %H:%M:%S')
     }
     response = make_response(
@@ -65,6 +67,7 @@ def get_user_jobs():
             'location': job.location,
             'requirements': job.requirements,
             'salary': job.salary,
+            'deadline':job.deadline,
             'created_at': job.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }
         user_jobs_list.append(user_job_data)
@@ -74,8 +77,8 @@ def get_user_jobs():
 @job_bp.route("/my_jobs",methods=['POST'])
 @jwt_required()   #Require Authentication to access this route
 def add_a_new_job():
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
     
     current_user_id = get_jwt_identity()
     
@@ -88,6 +91,7 @@ def add_a_new_job():
         location = data['location'],
         requirements = data['requirements'],
         salary = data['salary'],
+        deadline=data['deadline'],
     )
     db.session.add(new_job)
     db.session.commit()
@@ -104,6 +108,7 @@ def add_a_new_job():
             'location': created_job.location,
             'requirements':created_job.requirements,
             'salary': created_job.salary,
+            'deadline':created_job.deadline,
             'created_at': created_job.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }
         return jsonify({'message': 'Job created successfully','job':response_data}), 201
@@ -115,8 +120,8 @@ def add_a_new_job():
 @job_bp.route('/my_jobs/<int:job_id>', methods=['PUT'])
 @jwt_required()
 def update_job(job_id):
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
     
     # Ensure required fields are present in the request
     required_fields = ['title', 'category', 'description', 'location', 'company', 'requirements', 'salary']
@@ -131,6 +136,7 @@ def update_job(job_id):
     company = data['company']
     salary = data['salary']
     requirements = data['requirements']
+    deadline=data['deadline'],
     
     #check if the job exists
     existing_job = Job.query.get(job_id)
@@ -148,6 +154,7 @@ def update_job(job_id):
             existing_job.company = company
             existing_job.salary = salary
             existing_job.requirements = requirements
+            existing_job.deadline = deadline
             db.session.commit()
             
             response_data = {
@@ -159,6 +166,7 @@ def update_job(job_id):
                 'company': existing_job.company,
                 'salary':  existing_job.salary,
                 'requirements': existing_job.requirements,
+                'deadline':existing_job.deadline,
                 'created_at': existing_job.created_at.strftime('%Y-%m-%d %H:%M:%S')
             }
             return make_response(jsonify(response_data),200)
@@ -237,6 +245,7 @@ def search_property(search):
         'location':job.location,
         'requirements':job.requirements,
         'salary':job.salary,
+        'deadline':job.deadline,
         'created_at':job.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }for job in jobs]
       ),200

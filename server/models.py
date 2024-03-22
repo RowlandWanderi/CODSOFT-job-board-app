@@ -52,6 +52,7 @@ class Job(db.Model):
     location = db.Column(db.String, nullable=False)
     requirements = db.Column(db.String, nullable=False)
     salary = db.Column(db.Integer,  nullable=False)
+    deadline = db.Column(db.Date)
     created_at  = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate = db.func.now())
     

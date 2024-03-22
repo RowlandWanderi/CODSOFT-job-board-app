@@ -37,8 +37,8 @@ def get_job_application():
 @application_bp.route('/my_applications', methods=['POST'])
 @jwt_required()
 def apply_for_a_job():
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
     
     current_user_id = get_jwt_identity()
     
@@ -69,7 +69,7 @@ def apply_for_a_job():
                 'last_name':created_application.users.last_name,
             }
         }
-        return jsonify({'message': 'Application created successfully', 'application': response_data}), 201
+        return jsonify({'success': 'Application created successfully', 'application': response_data}), 201
     else:
         return jsonify({'error':'Error creating application'}), 500
     
@@ -82,13 +82,13 @@ def delete_job_application(job_id):
     job_application= JobApplication.query.get(job_id)
     
     if not job_application:
-        return jsonify({"error": "Job not found"}), 404
+        return jsonify({"error": "Application not found"}), 404
     
     # Check if the current user is the owner of the job
     if job_application.user_id != current_user_id:
-        return jsonify({"error": "You are not authorized to delete this job"}), 403
+        return jsonify({"error": "You are not authorized to delete this job application"}), 403
     
     db.session.delete(job_application)
     db.session.commit()
     
-    return jsonify({"message": "Job deleted successfully"}), 200
+    return jsonify({"success": "Application deleted successfully"}), 200

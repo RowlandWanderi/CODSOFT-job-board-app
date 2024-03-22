@@ -10,8 +10,8 @@ user_bp = Blueprint('user_bp',__name__)
 #add user (register)
 @user_bp.route('/register', methods=['POST'])
 def register_user():
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
 
     required_fields = ['first_name', 'last_name', 'email', 'phone', 'password', 'role']
     for field in required_fields:
@@ -95,8 +95,8 @@ def update_user_details():
     user = User.query.filter_by(id=user_id).first()
 
     if user:
-        #data = request.get_json()
-        data=request.form
+        data = request.get_json()
+        #data=request.form
 
         first_name = data.get('first_name', user.first_name)  
         last_name = data.get('last_name', user.last_name)  
@@ -120,8 +120,8 @@ def update_user_details():
 #reset password
 @user_bp.route('/reset_password' ,methods=['POST'])
 def reset_password():
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
 
     # Extract data from the request
     first_name = data['first_name']
@@ -149,8 +149,8 @@ def reset_password():
 def change_password():
     user_id = get_jwt_identity()  # current user id
 
-    #data = request.get_json()
-    data=request.form
+    data = request.get_json()
+    #data=request.form
 
     current_password = data['current_password']
     new_password = data['new_password']

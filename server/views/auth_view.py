@@ -8,8 +8,8 @@ auth_bp = Blueprint('auth_bp',__name__)
 #login
 @auth_bp.route('/login', methods=['POST'])
 def login():
-   #data = request.get_json()
-   data=request.form
+   data = request.get_json()
+   #data=request.form
 
    email = data['email']
    password = data['password']
