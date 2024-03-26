@@ -12,6 +12,7 @@ import MyJobs from './pages/MyJobs'
 import PostJob from './pages/PostJob'
 import Profile from './pages/Profile'
 import Register from './pages/Register'
+import ResetPassword from './pages/ResetPassword';
 import SingleJob from './pages/SingleJob'
 
 import UserProvider from './context/UserContext'
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/my_applications" element={<MyApplications />} />
                   <Route path="/my_jobs" element={<MyJobs />} />
                   <Route path="/post_job" element={<PostJob />} />
+                  <Route path="/reset_password" element={<ResetPassword />} />
                   <Route path="/single_job/:id" element={<SingleJob />} />
                 </Route>
               </Routes>

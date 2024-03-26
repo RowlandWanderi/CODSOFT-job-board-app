@@ -166,7 +166,7 @@ export default function UserProvider({children}){
                 icon: "success",
                 title: data.success,
                 showConfirmButton: false,
-                timer: 150
+                timer: 1500
             })
             navigate('/')
             setLoggedIn(false)
